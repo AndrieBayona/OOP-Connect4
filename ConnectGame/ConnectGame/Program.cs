@@ -57,8 +57,9 @@ namespace ConnectGame
         }
     }
 
-    public class Board // Updated Lyndon
-    {
+     
+            public class Board // Updated Lyndon
+         {
 
         //add method to check 'bottom'
         //add method to display and update board
@@ -112,11 +113,8 @@ namespace ConnectGame
                     int x = 1;
                     while (x <= 7)
                     {
-                        if (board[i,x] != "X" && board[i,x] != "O")
-                        {
-                            board[i, x] = " # ";
-                            Console.Write(board[i, x]);
-                        }
+                        board[i, x] = " # ";
+                        Console.Write(board[i, x]);                       
                         x++;
                     }
                     i++;
@@ -136,6 +134,7 @@ namespace ConnectGame
 
         //}
     }
+
     public class Controller // Updated By Andrie
     {
         //add method for the numbers(pick)
