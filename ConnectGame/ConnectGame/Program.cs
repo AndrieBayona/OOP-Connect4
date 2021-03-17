@@ -141,6 +141,35 @@ namespace ConnectGame
         //}
     }
     
+    
+    public class Controller // Updated By Andrie
+    {
+        //add method for the numbers(pick)
+        //add method to restart
+        //public void PlayerTurn()
+
+        public static void PlayerTurn(Player activePlayer)
+        {
+            Console.WriteLine("Its {0}'s turn", activePlayer.Name);
+        }
+
+        //dummy code for testing
+        public static void PlacePiece(char piece)
+        {
+            int pos;
+            do
+            {
+                Console.WriteLine("Select a location to place a piece: ");
+                pos = Convert.ToInt32(Console.ReadLine());
+
+            } while (pos < 1 || pos > 7);
+
+            Console.WriteLine("'{0}' placed at column {1}", piece, pos);
+        }
+
+
+    }
+    
     class Program
     {
         static void Main(string[] args)
