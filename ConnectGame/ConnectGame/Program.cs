@@ -229,7 +229,8 @@ namespace ConnectGame
             Board.BoardDisplay(board);
             Console.WriteLine(" ");
             
-
+            //github visual studio test
+            //testing commits
 
 
             Console.Read();
