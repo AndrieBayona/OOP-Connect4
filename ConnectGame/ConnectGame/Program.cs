@@ -13,7 +13,7 @@ namespace ConnectGame
 
         public string Name { get; set; }
         public char Piece { get; set; }
-        public Player (string name, char piece)
+        public Player (string name, string piece)
         {
             Name = name;
             Piece = piece;
@@ -32,7 +32,7 @@ namespace ConnectGame
     class Player1 : Player
     {
         //will inherit from player
-        public Player1(string name, char piece) : base(name, piece)
+        public Player1(string name, string piece) : base(name, piece)
         {
 
         }
@@ -48,7 +48,7 @@ namespace ConnectGame
     class Player2 : Player
     {
         //will inherit from player
-        public Player2(string name, char piece) : base(name, piece)
+        public Player2(string name, string piece) : base(name, piece)
         {
 
         }
@@ -92,8 +92,15 @@ namespace ConnectGame
                 while (x <= 7)
                 {
                    
-                        board[i, x] = " X ";
+                    if (board[i, x] == " X " || board[i, x] == " O ")
+                    {
                         Console.Write(board[i, x]);
+                    }
+                    else
+                    {
+                        board[i, x] = " # ";
+                        Console.Write(board[i, x]);
+                    }
                              
                     x++;
                 }
@@ -154,7 +161,7 @@ namespace ConnectGame
         }
 
         //dummy code for testing
-        public static void PlacePiece(char piece)
+        public static string[,] DropPiece(string[,] board, string piece)
         {
             int pos;
             do
@@ -165,6 +172,27 @@ namespace ConnectGame
             } while (pos < 1 || pos > 7);
 
             Console.WriteLine("'{0}' placed at column {1}", piece, pos);
+
+            int i = 6;
+            while (i >= 1)
+            {
+                if (board[i, pos] != " X " && board[i, pos] != " O ")
+                {
+                    board[i, pos] = piece;
+                    break;
+                }
+                else if (board[i, pos] == " X " || board[i, pos] == " O ")
+                {
+                    i--;
+                }
+                else
+                {
+                    i--;
+
+                }
+            }
+            //board[5, pos] = piece;
+            return board;
         }
 
 
@@ -187,8 +215,8 @@ namespace ConnectGame
             Console.Write("Player 2: ");
             p2 = Console.ReadLine();
 
-            Player player1 = new Player1(p1, 'X');
-            Player player2 = new Player2(p2, '0');
+            Player player1 = new Player1(p1, " X ");
+            Player player2 = new Player2(p2, " O ");
 
             player1.testInfo();
             player2.testInfo();
