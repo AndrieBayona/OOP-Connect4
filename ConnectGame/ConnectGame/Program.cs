@@ -112,12 +112,14 @@ namespace ConnectGame
 
 
         
-        public static void RestartBoard(string[,] board)
+        public static bool RestartBoard(string[,] board) // method restarting the board
         {
+
             Console.WriteLine("Restart? Yes(1) No(0):");
             string num = Console.ReadLine();
             if (num == "1")
             {
+
                 int i = 1;
                 Console.WriteLine(" ");
                 while (i <= 6)
@@ -127,25 +129,106 @@ namespace ConnectGame
                     while (x <= 7)
                     {
                         board[i, x] = " # ";
-                        Console.Write(board[i, x]);                       
+                        Console.Write(board[i, x]);
                         x++;
                     }
                     i++;
                     Console.Write("| \n");
                 }
-                Console.Write(" " + " 1 " + " 2 " + " 3 " + " 4 " + " 5 " + " 6 " + " 7 ");
+                Console.WriteLine(" " + " 1 " + " 2 " + " 3 " + " 4 " + " 5 " + " 6 " + " 7 ");
+                Console.WriteLine(" ");
+                return true;
             }
             else
             {
                 Console.WriteLine("Thank you for playing!");
+                return false;
             }
-           
+
         }
 
-        //public static bool WinnerBoard()
-        //{
+                public static bool WinnerBoard(string[,] board, Player activePlayer) // method checking winning combinations
+        {
+            bool winner = false;
 
-        //}
+
+            for (int i = 1; i <= 6; i++) // diagonal(up)
+            {
+
+                for (int x = 7; x >= 1; x--)
+                {
+
+                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
+                        board[i + 1, x - 1] == activePlayer.Piece &&
+                        board[i + 2, x - 2] == activePlayer.Piece &&
+                        board[i + 3, x - 3] == activePlayer.Piece)
+                    {
+                        winner = true;
+                    }
+
+                }
+            }
+
+            for (int i = 1; i <= 6; i++) // diagonal(down)
+            {
+
+                for (int x = 1; x <= 6; x++)
+                {
+
+                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
+                        board[i + 1, x + 1] == activePlayer.Piece &&
+                        board[i + 2, x + 2] == activePlayer.Piece &&
+                        board[i + 3, x + 3] == activePlayer.Piece)
+                    {
+                        winner = true;
+                    }
+
+                }
+            }
+
+            for (int i = 1; i <= 7; i++) // horizontal
+            {
+
+                for (int x = 1; x <= 6; x++)
+                {
+
+                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
+                        board[i, x + 1] == activePlayer.Piece &&
+                        board[i, x + 2] == activePlayer.Piece &&
+                        board[i, x + 3] == activePlayer.Piece)
+                    {
+                        winner = true;
+                    }
+
+                }
+            }
+
+            for (int i = 1; i <= 6; i++) // vertical
+            {
+
+                for (int x = 1; x <= 7; x++)
+                {
+
+                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
+                        board[i + 1, x] == activePlayer.Piece &&
+                        board[i + 2, x] == activePlayer.Piece &&
+                        board[i + 3, x] == activePlayer.Piece)
+                    {
+                        winner = true;
+                    }
+
+                }
+            }
+
+
+
+            return winner; // if player wins retrun true
+        }
+
+        public static void WinnerPlayer(Player activePlayer) // display who is the winner
+        {
+            Console.WriteLine("Winner is " + activePlayer.Name);
+        }
     }
     
     
@@ -198,17 +281,19 @@ namespace ConnectGame
 
     }
     
-    class Program
+   class Program
     {
         static void Main(string[] args)
         {
-            
+
             // the main
 
             ////initiating players
-            string[,] board = new string[7, 8]; //length is 52
+            string[,] board = new string[8, 9];
+
             string p1, p2;
-            int reset = 0;
+            bool reset = true;
+            bool winner = false;
             Console.WriteLine("Enter player information: ");
             Console.Write("Player 1: ");
             p1 = Console.ReadLine();
@@ -225,44 +310,44 @@ namespace ConnectGame
             Player obj2 = player2;
 
             //gameplay loop
-
+            Board.BoardDisplay(board);
             //display board
-            Console.WriteLine("Game Start");
+            Console.WriteLine("\nGame Start");
             do
             {
                 Controller.PlayerTurn(obj);
-                Controller.PlacePiece(obj.Piece);
-                //display board
-                //method to check bottom/win
-                //if condition to display when player 1 wins 
-                //display winner and ask user if they want to play again.
-
+                Controller.DropPiece(board, obj.Piece);
+                Board.BoardDisplay(board);  //display board
+                winner = Board.WinnerBoard(board, obj); //method to check /win
+                if (winner == true) //if condition to display when player 1 wins 
+                {
+                    Board.WinnerPlayer(obj); //display winner and ask user if they want to play again.
+                    reset = Board.RestartBoard(board);
+                    if (reset == false)
+                    {
+                        break;
+                    }
+                } 
+          
                 Controller.PlayerTurn(obj2);
-                Controller.PlacePiece(obj2.Piece);
-                //display board
-                //method to check bottom/win
-                //if condition to display when player 1 wins 
-                //display winner and ask user if they want to play again.
+                Controller.DropPiece(board, obj2.Piece);
+                Board.BoardDisplay(board);   //display board
+                winner = Board.WinnerBoard(board, obj2);    //method to check win
+                if (winner == true) //if condition to display when player 1 wins 
+                {
+                    Board.WinnerPlayer(obj2);  //display winner and ask user if they want to play again.
+                    reset = Board.RestartBoard(board);
+                    if (reset == false)
+                    {
+                        break;
+                    }
+                }
 
 
-                //for testing and debugging
-                Console.WriteLine("Reset?");
-                Board.RestartBoard(board);
-
-
-
-            } while ();
-
-
-            Board.BoardDisplay(board);
-            Console.WriteLine(" ");
-            
-            //github visual studio test
-            //testing commits
-
+            } while (reset == true);
 
             Console.Read();
-
-          
+            
         }
+    }
 }
