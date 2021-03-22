@@ -147,7 +147,7 @@ namespace ConnectGame
 
         }
 
-                public static bool WinnerBoard(string[,] board, Player activePlayer) // method checking winning combinations
+         public static bool WinnerBoard(string[,] board, Player player) // method checking winning combinations
         {
             bool winner = false;
 
@@ -157,11 +157,8 @@ namespace ConnectGame
 
                 for (int x = 7; x >= 1; x--)
                 {
-
-                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
-                        board[i + 1, x - 1] == activePlayer.Piece &&
-                        board[i + 2, x - 2] == activePlayer.Piece &&
-                        board[i + 3, x - 3] == activePlayer.Piece)
+                    // check conditions if area is populated by the piece
+                    if (board[i, x] == player.Piece &&  board[i + 1, x - 1] == player.Piece &&  board[i + 2, x - 2] == player.Piece && board[i + 3, x - 3] == player.Piece)
                     {
                         winner = true;
                     }
@@ -174,11 +171,8 @@ namespace ConnectGame
 
                 for (int x = 1; x <= 6; x++)
                 {
-
-                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
-                        board[i + 1, x + 1] == activePlayer.Piece &&
-                        board[i + 2, x + 2] == activePlayer.Piece &&
-                        board[i + 3, x + 3] == activePlayer.Piece)
+                    // check conditions if area is populated by the piece
+                    if (board[i, x] == player.Piece && board[i + 1, x + 1] == player.Piece && board[i + 2, x + 2] == player.Piece && board[i + 3, x + 3] == player.Piece)
                     {
                         winner = true;
                     }
@@ -191,11 +185,8 @@ namespace ConnectGame
 
                 for (int x = 1; x <= 6; x++)
                 {
-
-                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
-                        board[i, x + 1] == activePlayer.Piece &&
-                        board[i, x + 2] == activePlayer.Piece &&
-                        board[i, x + 3] == activePlayer.Piece)
+                    // check conditions if area is populated by the piece
+                    if (board[i, x] == player.Piece && board[i, x + 1] == player.Piece && board[i, x + 2] == player.Piece && board[i, x + 3] == player.Piece)
                     {
                         winner = true;
                     }
@@ -208,11 +199,8 @@ namespace ConnectGame
 
                 for (int x = 1; x <= 7; x++)
                 {
-
-                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
-                        board[i + 1, x] == activePlayer.Piece &&
-                        board[i + 2, x] == activePlayer.Piece &&
-                        board[i + 3, x] == activePlayer.Piece)
+                    // check conditions if area is populated by the piece
+                    if (board[i, x] == player.Piece && board[i + 1, x] == player.Piece && board[i + 2, x] == player.Piece && board[i + 3, x] == player.Piece)
                     {
                         winner = true;
                     }
@@ -223,11 +211,13 @@ namespace ConnectGame
 
 
             return winner; // if player wins retrun true
-        }
+           //WinnerBoard adapted from
+           //Doctor Krypto. (2020). C# Connect4 Console Game 4 Check for the Win [Video]. Youtube. https://www.youtube.com/watch?v=A-fl-Ui_8Wo&t=344s&ab_channel=DoctorKrypto
+        }       
 
-        public static void WinnerPlayer(Player activePlayer) // display who is the winner
+         public static void WinnerPlayer(Player player) // display who is the winner
         {
-            Console.WriteLine("Winner is " + activePlayer.Name);
+            Console.WriteLine("Winner is " + player.Name);
         }
     }
     
@@ -238,9 +228,9 @@ namespace ConnectGame
         //add method to restart
         //public void PlayerTurn()
 
-        public static void PlayerTurn(Player activePlayer)
+         public static void PlayerTurn(Player player)
         {
-            Console.WriteLine("Its {0}'s turn", activePlayer.Name);
+            Console.WriteLine("Its {0}'s turn", player.Name);
         }
 
         //dummy code for testing
@@ -347,6 +337,14 @@ namespace ConnectGame
             } while (reset == true);
 
             Console.Read();
+            
+            
+            //Adapted from Github Gist Example
+            //Title: Connect 4 Command Line C#
+            //Author: Michael Estes
+            //Date:2013
+            //Code version: N/A
+            //Availablity: https://gist.github.com/MichaelEstes/7953391
             
         }
     }
