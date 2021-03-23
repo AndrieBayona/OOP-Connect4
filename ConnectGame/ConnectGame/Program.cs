@@ -19,7 +19,7 @@ namespace ConnectGame
             Piece = piece;
         }
 
-        public virtual void testInfo()
+        public virtual void DisplayInfo()
         {
             Console.WriteLine("Hello {0}", Name);
         }
@@ -37,7 +37,7 @@ namespace ConnectGame
 
         }
 
-        public override void testInfo()
+        public override void DisplayInfo()
         {
             Console.WriteLine("Hello {0}, you'll be '{1}'", Name, Piece);
         }
@@ -53,7 +53,7 @@ namespace ConnectGame
 
         }
 
-        public override void testInfo()
+        public override void DisplayInfo()
         {
             Console.WriteLine("Hello {0}, you'll be '{1}'", Name, Piece);
         }
@@ -146,6 +146,25 @@ namespace ConnectGame
             }
 
         }
+        
+        public static bool FullBoard(string[,] board) //checks if the top row is occupied
+        {
+            bool full = false;
+            if(board[1, 1] != " # " &&
+               board[1, 2] != " # " &&
+               board[1, 3] != " # " &&
+               board[1, 4] != " # " &&
+               board[1, 5] != " # " &&
+               board[1, 6] != " # " &&
+               board[1, 7] != " # ")
+            {
+                full = true;
+            }
+
+            return full;
+        }
+        
+        
 
          public static bool WinnerBoard(string[,] board, Player player) // method checking winning combinations
         {
@@ -217,6 +236,7 @@ namespace ConnectGame
 
          public static void WinnerPlayer(Player player) // display who is the winner
         {
+            Console.WriteLine("");
             Console.WriteLine("Winner is " + player.Name);
         }
     }
@@ -227,13 +247,30 @@ namespace ConnectGame
         //add method for the numbers(pick)
         //add method to restart
         //public void PlayerTurn()
+        
+        public static string _piece { get; set; } = "a";
+        public static int _position { get; set; } = 0;
 
          public static void PlayerTurn(Player player)
         {
             Console.WriteLine("Its {0}'s turn", player.Name);
         }
+        
+        public static void PreviousMove()
+        {
+            if (_piece == "a" && _position == 0)
+            {
+                Console.WriteLine("");
+            }
+            else
+            {
+                Console.WriteLine("");
+                Console.WriteLine("'{0}' placed at column {1}", _piece, _position);
+            }
 
-        //dummy code for testing
+        }
+
+        
         public static string[,] DropPiece(string[,] board, string piece)
         {
             int pos;
@@ -244,7 +281,8 @@ namespace ConnectGame
 
             } while (pos < 1 || pos > 7);
 
-            Console.WriteLine("'{0}' placed at column {1}", piece, pos);
+            _piece = piece;
+            _position = pos;
 
             int i = 6;
             while (i >= 1)
@@ -264,7 +302,7 @@ namespace ConnectGame
 
                 }
             }
-            //board[5, pos] = piece;
+            
             return board;
         }
 
@@ -277,10 +315,9 @@ namespace ConnectGame
         {
 
             // the main
-
-            ////initiating players
+            //initiating board
             string[,] board = new string[8, 9];
-
+            //initiating players
             string p1, p2;
             bool reset = true;
             bool winner = false;
@@ -293,8 +330,8 @@ namespace ConnectGame
             Player player1 = new Player1(p1, " X ");
             Player player2 = new Player2(p2, " O ");
 
-            player1.testInfo();
-            player2.testInfo();
+            player1.DisplayInfo();
+            player2.DisplayInfo();
 
             Player obj = player1;
             Player obj2 = player2;
@@ -305,8 +342,20 @@ namespace ConnectGame
             Console.WriteLine("\nGame Start");
             do
             {
+                fullBoard = Board.FullBoard(board);//checks if the board is full
+                if (fullBoard == true)
+                {
+                    Console.WriteLine("Game is a tie!");
+                    reset = Board.RestartBoard(board);
+                    if (reset == false)
+                    {
+                        break;
+                    }
+                }
+                Controller.PreviousMove();
                 Controller.PlayerTurn(obj);
                 Controller.DropPiece(board, obj.Piece);
+                Console.Clear();
                 Board.BoardDisplay(board);  //display board
                 winner = Board.WinnerBoard(board, obj); //method to check /win
                 if (winner == true) //if condition to display when player 1 wins 
@@ -318,9 +367,21 @@ namespace ConnectGame
                         break;
                     }
                 } 
-          
+                
+                fullBoard = Board.FullBoard(board);//checks if the board is full
+                if (fullBoard == true)
+                {
+                    Console.WriteLine("Game is a tie!");
+                    reset = Board.RestartBoard(board);
+                    if (reset == false)
+                    {
+                        break;
+                    }
+                }
+                Controller.PreviousMove();
                 Controller.PlayerTurn(obj2);
                 Controller.DropPiece(board, obj2.Piece);
+                Console.Clear();
                 Board.BoardDisplay(board);   //display board
                 winner = Board.WinnerBoard(board, obj2);    //method to check win
                 if (winner == true) //if condition to display when player 1 wins 
