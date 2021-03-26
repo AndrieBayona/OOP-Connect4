@@ -12,7 +12,7 @@ namespace ConnectGame
     {
 
         public string Name { get; set; }
-        public char Piece { get; set; }
+        public string Piece { get; set; }
         public Player (string name, string piece)
         {
             Name = name;
