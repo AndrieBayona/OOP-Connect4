@@ -311,91 +311,94 @@ namespace ConnectGame
     
    class Program
     {
-        static void Main(string[] args)
+       
+       
+        public static void UserChoice(string [,] board, string p1, string p2, bool reset, bool winner, Player obj, Player obj2, bool fullBoard)
         {
 
-            // the main
-            //initiating board
-            string[,] board = new string[8, 9];
-            //initiating players
-            string p1, p2;
-            bool reset = true;
-            bool winner = false;
-            Console.WriteLine("Enter player information: ");
-            Console.Write("Player 1: ");
-            p1 = Console.ReadLine();
-            Console.Write("Player 2: ");
-            p2 = Console.ReadLine();
-
-            Player player1 = new Player1(p1, " X ");
-            Player player2 = new Player2(p2, " O ");
-
-            player1.DisplayInfo();
-            player2.DisplayInfo();
-
-            Player obj = player1;
-            Player obj2 = player2;
-
-            //gameplay loop
-            Board.BoardDisplay(board);
-            //display board
-            Console.WriteLine("\nGame Start");
-            do
+            while (reset == true)
             {
                 fullBoard = Board.FullBoard(board);//checks if the board is full
                 if (fullBoard == true)
                 {
                     Console.WriteLine("Game is a tie!");
-                    reset = Board.RestartBoard(board);
-                    if (reset == false)
-                    {
-                        break;
-                    }
+                    break;
                 }
+
                 Controller.PreviousMove();
                 Controller.PlayerTurn(obj);
                 Controller.DropPiece(board, obj.Piece);
-                Console.Clear();
                 Board.BoardDisplay(board);  //display board
                 winner = Board.WinnerBoard(board, obj); //method to check /win
                 if (winner == true) //if condition to display when player 1 wins 
                 {
                     Board.WinnerPlayer(obj); //display winner and ask user if they want to play again.
-                    reset = Board.RestartBoard(board);
-                    if (reset == false)
-                    {
-                        break;
-                    }
-                } 
-                
+                    break;
+                }
+
                 fullBoard = Board.FullBoard(board);//checks if the board is full
                 if (fullBoard == true)
                 {
                     Console.WriteLine("Game is a tie!");
-                    reset = Board.RestartBoard(board);
-                    if (reset == false)
-                    {
-                        break;
-                    }
+                    break;
                 }
+
                 Controller.PreviousMove();
                 Controller.PlayerTurn(obj2);
                 Controller.DropPiece(board, obj2.Piece);
-                Console.Clear();
-                Board.BoardDisplay(board);   //display board
+                Board.BoardDisplay(board);   //display board                
                 winner = Board.WinnerBoard(board, obj2);    //method to check win
                 if (winner == true) //if condition to display when player 1 wins 
                 {
                     Board.WinnerPlayer(obj2);  //display winner and ask user if they want to play again.
-                    reset = Board.RestartBoard(board);
-                    if (reset == false)
-                    {
-                        break;
-                    }
+                    break;
+                }
+            }
+           
+        }
+       
+        static void Main(string[] args)
+        {
+
+           
+             string[,] board = new string[8, 9];
+
+            string p1, p2;
+            bool reset = true;
+            bool winner = false;
+            bool fullBoard = true;
+            do
+            {
+                Console.WriteLine("Enter player information: ");
+                Console.Write("Player 1: ");
+                p1 = Console.ReadLine();
+                Console.Write("Player 2: ");
+                p2 = Console.ReadLine();
+
+                Player player1 = new Player1(p1, " X ");
+                Player player2 = new Player2(p2, " O ");
+
+                player1.testInfo();
+                player2.testInfo();
+
+                Player obj = player1;
+                Player obj2 = player2;
+
+                //gameplay loop
+                Board.BoardDisplay(board);
+                //display board
+                Console.WriteLine("\nGame Start");
+
+                UserChoice(board, p1, p2, reset, winner, obj, obj2, fullBoard);
+
+                reset = Board.RestartBoard(board); //after winner results ask user for a restart
+                if (reset == false)
+                {
+                    break;
                 }
 
-
             } while (reset == true);
+            
 
             Console.Read();
             
