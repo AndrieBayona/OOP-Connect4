@@ -349,10 +349,10 @@ namespace ConnectGame
    class Program
     {
        
-       
-        public static void UserChoice(string [,] board, string p1, string p2, bool reset, bool winner, Player obj, Player obj2, bool fullBoard)
+        public static void UserChoice(string[,] board, string p1, string p2, bool reset, bool winner, Player obj, Player obj2, bool fullBoard,string choice)
         {
-
+ 
+          
             while (reset == true)
             {
                 fullBoard = Board.FullBoard(board);//checks if the board is full
@@ -382,7 +382,14 @@ namespace ConnectGame
 
                 Controller.PreviousMove();
                 Controller.PlayerTurn(obj2);
-                Controller.DropPiece(board, obj2.Piece);
+                if (choice == "1")
+                {
+                    Controller.DropPieceComp(board, obj2.Piece);
+                }
+                if (choice == "2")
+                {
+                    Controller.DropPiece(board, obj2.Piece);
+                }
                 Board.BoardDisplay(board);   //display board                
                 winner = Board.WinnerBoard(board, obj2);    //method to check win
                 if (winner == true) //if condition to display when player 1 wins 
@@ -391,7 +398,7 @@ namespace ConnectGame
                     break;
                 }
             }
-           
+
         }
        
         static void Main(string[] args)
