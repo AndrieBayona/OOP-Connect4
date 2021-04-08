@@ -305,6 +305,43 @@ namespace ConnectGame
             
             return board;
         }
+        
+        public static string[,] DropPieceComp(string[,] board, string piece)
+        {
+            Random ran = new Random();
+            int pos;
+
+            do
+            {
+                Console.WriteLine("Select a location to place a piece: ");
+                pos = ran.Next(1,7);
+
+            } while (pos < 1 || pos > 7);
+
+            Console.WriteLine("'{0}' placed at column {1}", piece, pos);
+
+            int i = 6;
+            while (i >= 1)
+            {
+                if (board[i, pos] != " X " && board[i, pos] != " O ")
+                {
+                    board[i, pos] = piece;
+                    break;
+                }
+                else if (board[i, pos] == " X " || board[i, pos] == " O ")
+                {
+                    i--;
+                }
+                else
+                { 
+                    i--;
+
+                }
+            }
+            //board[5, pos] = piece;
+            Console.Clear();
+            return board;
+        }
 
 
     }
