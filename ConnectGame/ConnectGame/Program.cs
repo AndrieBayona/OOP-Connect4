@@ -59,7 +59,18 @@ namespace ConnectGame
         }
     }
     
-    
+    class Computer : Player
+    {
+        public Computer(string name, string piece) : base(name, piece)
+        {
+        }
+
+        public override void DisplayInfo()
+        {
+            Console.WriteLine("You'll be playing against a Computer! 'O'");
+        }
+
+    }
     
     
     
@@ -234,10 +245,10 @@ namespace ConnectGame
            //Doctor Krypto. (2020). C# Connect4 Console Game 4 Check for the Win [Video]. Youtube. https://www.youtube.com/watch?v=A-fl-Ui_8Wo&t=344s&ab_channel=DoctorKrypto
         }       
 
-         public static void WinnerPlayer(Player player) // display who is the winner
+         public static void WinnerPlayer(Player activePlayer) // display who is the winner
         {
             Console.WriteLine("");
-            Console.WriteLine("Winner is " + player.Name);
+            Console.WriteLine("The winner is {0}!({1})", activePlayer.Name, activePlayer.Piece);
         }
     }
     
@@ -251,9 +262,9 @@ namespace ConnectGame
         public static string _piece { get; set; } = "a";
         public static int _position { get; set; } = 0;
 
-         public static void PlayerTurn(Player player)
+         public static void PlayerTurn(Player activePlayer)//displays whose turn it is
         {
-            Console.WriteLine("Its {0}'s turn", player.Name);
+            Console.WriteLine("Its {0}'s turn({1})", activePlayer.Name, activePlayer.Piece);
         }
         
         public static void PreviousMove()
@@ -271,19 +282,40 @@ namespace ConnectGame
         }
 
         
-        public static string[,] DropPiece(string[,] board, string piece)
+        public static string[,] DropPiece(string[,] board, string piece, int mode)
         {
             int pos;
-            do
-            {
-                Console.WriteLine("Select a location to place a piece: ");
-                pos = Convert.ToInt32(Console.ReadLine());
+            Random rnd = new Random();
 
-            } while (pos < 1 || pos > 7);
+            if(mode == 1 && piece == " O ")//computer selects a random number between 1 to 7
+            {
+                pos = rnd.Next(1, 8);
+            }
+            else
+            {
+                do
+                {
+                    Console.WriteLine("Select a location to place a piece: ");
+                    pos = Convert.ToInt32(Console.ReadLine());
+                    if (pos > 7 || pos < 1)
+                    {
+                        Console.WriteLine("Select 1 to 7 only.");
+                    }
+
+                } while (pos < 1 || pos > 7);
+                
+            }
+            //checks the 'top' of the board
+            if (board[1, pos] == " O " || board[1, pos] == " X ")
+            {
+                Console.WriteLine("Column is Full! Select a new one.");
+                DropPiece(board, piece, mode);
+            }
 
             _piece = piece;
             _position = pos;
-
+            
+            //checks the 'bottom' of the board
             int i = 6;
             while (i >= 1)
             {
@@ -303,43 +335,6 @@ namespace ConnectGame
                 }
             }
             
-            return board;
-        }
-        
-        public static string[,] DropPieceComp(string[,] board, string piece)
-        {
-            Random ran = new Random();
-            int pos;
-
-            do
-            {
-                Console.WriteLine("Select a location to place a piece: ");
-                pos = ran.Next(1,7);
-
-            } while (pos < 1 || pos > 7);
-
-            Console.WriteLine("'{0}' placed at column {1}", piece, pos);
-
-            int i = 6;
-            while (i >= 1)
-            {
-                if (board[i, pos] != " X " && board[i, pos] != " O ")
-                {
-                    board[i, pos] = piece;
-                    break;
-                }
-                else if (board[i, pos] == " X " || board[i, pos] == " O ")
-                {
-                    i--;
-                }
-                else
-                { 
-                    i--;
-
-                }
-            }
-            //board[5, pos] = piece;
-            Console.Clear();
             return board;
         }
 
@@ -348,103 +343,106 @@ namespace ConnectGame
     
    class Program
     {
-       
-        public static void UserChoice(string[,] board, string p1, string p2, bool reset, bool winner, Player obj, Player obj2, bool fullBoard,string choice)
-        {
- 
-          
-            while (reset == true)
-            {
-                fullBoard = Board.FullBoard(board);//checks if the board is full
-                if (fullBoard == true)
-                {
-                    Console.WriteLine("Game is a tie!");
-                    break;
-                }
-
-                Controller.PreviousMove();
-                Controller.PlayerTurn(obj);
-                Controller.DropPiece(board, obj.Piece);
-                Board.BoardDisplay(board);  //display board
-                winner = Board.WinnerBoard(board, obj); //method to check /win
-                if (winner == true) //if condition to display when player 1 wins 
-                {
-                    Board.WinnerPlayer(obj); //display winner and ask user if they want to play again.
-                    break;
-                }
-
-                fullBoard = Board.FullBoard(board);//checks if the board is full
-                if (fullBoard == true)
-                {
-                    Console.WriteLine("Game is a tie!");
-                    break;
-                }
-
-                Controller.PreviousMove();
-                Controller.PlayerTurn(obj2);
-                if (choice == "1")
-                {
-                    Controller.DropPieceComp(board, obj2.Piece);
-                }
-                if (choice == "2")
-                {
-                    Controller.DropPiece(board, obj2.Piece);
-                }
-                Board.BoardDisplay(board);   //display board                
-                winner = Board.WinnerBoard(board, obj2);    //method to check win
-                if (winner == true) //if condition to display when player 1 wins 
-                {
-                    Board.WinnerPlayer(obj2);  //display winner and ask user if they want to play again.
-                    break;
-                }
-            }
-
-        }
+      
        
         static void Main(string[] args)
         {
-
-           
-             string[,] board = new string[8, 9];
-
+            //initiating board
+            string[,] board = new string[8, 9];
+            //initiating players
             string p1, p2;
             bool reset = true;
-            bool winner = false;
-            bool fullBoard = true;
+            bool fullBoard;
+
+            //selecting between 1 player or 2 player game
+            int mode;
             do
             {
-                Console.WriteLine("Enter player information: ");
-                Console.Write("Player 1: ");
-                p1 = Console.ReadLine();
+                Console.Clear();
+                Console.WriteLine("Select a game mode: \n1: Against Computer \n2: Against another Player");
+                mode = Convert.ToInt32(Console.ReadLine());
+            } while (mode > 2 || mode < 1);
+
+            //takes in player information
+
+            Console.WriteLine("Enter player information: ");
+            Console.Write("Player 1: ");
+            p1 = Console.ReadLine();
+            Player player1 = new Player1(p1, " X ");
+            Player player2;
+            //initializes computer depending on the chosen mode
+
+            if (mode == 1)
+            {
+                p2 = "Computer";
+                player2 = new Computer(p2, " O ");
+            }
+            else
+            {
                 Console.Write("Player 2: ");
                 p2 = Console.ReadLine();
+                player2 = new Player2(p2, " O ");
+            }         
 
-                Player player1 = new Player1(p1, " X ");
-                Player player2 = new Player2(p2, " O ");
+            // displays player information
 
-                player1.testInfo();
-                player2.testInfo();
+            player1.DisplayInfo();
+            player2.DisplayInfo();
 
-                Player obj = player1;
-                Player obj2 = player2;
+            //Player obj = player1;
+            //Player obj2 = player2;
+            Player active = player1;
 
-                //gameplay loop
-                Board.BoardDisplay(board);
-                //display board
-                Console.WriteLine("\nGame Start");
+            //start of the gameplay loop, first it shows the board
 
-                UserChoice(board, p1, p2, reset, winner, obj, obj2, fullBoard);
+            Board.BoardDisplay(board);
 
-                reset = Board.RestartBoard(board); //after winner results ask user for a restart
-                if (reset == false)
+            //signals the start of the game
+
+            Console.WriteLine("\nGame Start");
+
+            do
+            {
+                fullBoard = Board.FullBoard(board);//checks if the board is full
+                if (fullBoard == true)
                 {
-                    break;
+                    Console.WriteLine("Game is a tie!");
+                    reset = Board.RestartBoard(board);
+                    if (reset == false)
+                    {
+                        break;
+                    }
+                }
+                Controller.PreviousMove();
+                Controller.PlayerTurn(active);
+                Controller.DropPiece(board, active.Piece, mode);
+                Console.Clear();
+                Board.BoardDisplay(board);  //display board
+                bool winner = Board.WinnerBoard(board, active);
+                if (winner == true) //if condition to display when a player wins
+                {
+                    Board.WinnerPlayer(active); //display winner and ask user if they want to play again.
+                    reset = Board.RestartBoard(board);
+                    if (reset == false)
+                    {
+                        break;
+                    }
                 }
 
+                if(active.Name == player1.Name)
+                {
+                    active = player2;
+                }
+                else if(active.Name == player2.Name)
+                {
+                    active = player1;
+                }
+
+
             } while (reset == true);
-            
 
             Console.Read();
+            
             
             
             //Adapted from Github Gist Example
