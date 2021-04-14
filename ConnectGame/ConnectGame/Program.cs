@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace ConnectGame
 {
-    //skeleton code at its current state
-    
+    //displays the board
     public class Player
     {
 
         public string Name { get; set; }
         public string Piece { get; set; }
-        public Player (string name, string piece)
+        public Player(string name, string piece)
         {
             Name = name;
             Piece = piece;
@@ -23,9 +22,6 @@ namespace ConnectGame
         {
             Console.WriteLine("Hello {0}", Name);
         }
-        //checks turn
-        //display winner
-        //display turns
 
     }
 
@@ -34,15 +30,12 @@ namespace ConnectGame
         //will inherit from player
         public Player1(string name, string piece) : base(name, piece)
         {
-
         }
 
         public override void DisplayInfo()
         {
-            Console.WriteLine("Hello {0}, you'll be '{1}'", Name, Piece);
+            Console.WriteLine("Hello {0}, you'll be 'X'", Name);
         }
-
-
     }
 
     class Player2 : Player
@@ -50,15 +43,14 @@ namespace ConnectGame
         //will inherit from player
         public Player2(string name, string piece) : base(name, piece)
         {
-
         }
 
         public override void DisplayInfo()
         {
-            Console.WriteLine("Hello {0}, you'll be '{1}'", Name, Piece);
+            Console.WriteLine("Hello {0}, you'll be 'O'", Name);
         }
     }
-    
+
     class Computer : Player
     {
         public Computer(string name, string piece) : base(name, piece)
@@ -71,29 +63,27 @@ namespace ConnectGame
         }
 
     }
-    
-    
-    
-    
+
+
+
     public class Board // Updated Lyndon
     {
 
-        //add method to check 'bottom'
         //add method to display and update board
         //check winning combination
         // restart game
 
-       
-
-         public Board() {
-
-            
-         }
-       
-
-        public static void BoardDisplay(string[,] board)
+        public Board()
         {
-          Console.WriteLine("Connect 4 Game Development Project: \n");
+
+        }
+
+        public static void BoardDisplay(string[,] board)  // method displaying the board
+        {
+            
+            Console.WriteLine();
+            Console.WriteLine("Connect 4 Game Development Project: \n");
+            
 
             int i = 1;
             while (i <= 6)
@@ -102,7 +92,6 @@ namespace ConnectGame
                 int x = 1;
                 while (x <= 7)
                 {
-                   
                     if (board[i, x] == " X " || board[i, x] == " O ")
                     {
                         Console.Write(board[i, x]);
@@ -112,17 +101,18 @@ namespace ConnectGame
                         board[i, x] = " # ";
                         Console.Write(board[i, x]);
                     }
-                             
+
                     x++;
                 }
                 i++;
                 Console.Write("| \n");
             }
-            Console.Write(" "+" 1 " + " 2 " + " 3 " + " 4 " + " 5 " + " 6 " + " 7 ");
+            Console.Write(" " + " 1 " + " 2 " + " 3 " + " 4 " + " 5 " + " 6 " + " 7 ");
+            Console.WriteLine(" ");
         }
 
 
-        
+
         public static bool RestartBoard(string[,] board) // method restarting the board
         {
 
@@ -130,7 +120,7 @@ namespace ConnectGame
             string num = Console.ReadLine();
             if (num == "1")
             {
-
+                Console.Clear();
                 int i = 1;
                 Console.WriteLine(" ");
                 while (i <= 6)
@@ -157,7 +147,7 @@ namespace ConnectGame
             }
 
         }
-        
+
         public static bool FullBoard(string[,] board) //checks if the top row is occupied
         {
             bool full = false;
@@ -174,10 +164,7 @@ namespace ConnectGame
 
             return full;
         }
-        
-        
-
-         public static bool WinnerBoard(string[,] board, Player player) // method checking winning combinations
+        public static bool WinnerBoard(string[,] board, Player activePlayer) // method checking winning combinations
         {
             bool winner = false;
 
@@ -187,8 +174,11 @@ namespace ConnectGame
 
                 for (int x = 7; x >= 1; x--)
                 {
-                    // check conditions if area is populated by the piece
-                    if (board[i, x] == player.Piece &&  board[i + 1, x - 1] == player.Piece &&  board[i + 2, x - 2] == player.Piece && board[i + 3, x - 3] == player.Piece)
+
+                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
+                        board[i + 1, x - 1] == activePlayer.Piece &&
+                        board[i + 2, x - 2] == activePlayer.Piece &&
+                        board[i + 3, x - 3] == activePlayer.Piece)
                     {
                         winner = true;
                     }
@@ -201,8 +191,11 @@ namespace ConnectGame
 
                 for (int x = 1; x <= 6; x++)
                 {
-                    // check conditions if area is populated by the piece
-                    if (board[i, x] == player.Piece && board[i + 1, x + 1] == player.Piece && board[i + 2, x + 2] == player.Piece && board[i + 3, x + 3] == player.Piece)
+
+                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
+                        board[i + 1, x + 1] == activePlayer.Piece &&
+                        board[i + 2, x + 2] == activePlayer.Piece &&
+                        board[i + 3, x + 3] == activePlayer.Piece)
                     {
                         winner = true;
                     }
@@ -215,8 +208,11 @@ namespace ConnectGame
 
                 for (int x = 1; x <= 6; x++)
                 {
-                    // check conditions if area is populated by the piece
-                    if (board[i, x] == player.Piece && board[i, x + 1] == player.Piece && board[i, x + 2] == player.Piece && board[i, x + 3] == player.Piece)
+
+                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
+                        board[i, x + 1] == activePlayer.Piece &&
+                        board[i, x + 2] == activePlayer.Piece &&
+                        board[i, x + 3] == activePlayer.Piece)
                     {
                         winner = true;
                     }
@@ -229,8 +225,11 @@ namespace ConnectGame
 
                 for (int x = 1; x <= 7; x++)
                 {
-                    // check conditions if area is populated by the piece
-                    if (board[i, x] == player.Piece && board[i + 1, x] == player.Piece && board[i + 2, x] == player.Piece && board[i + 3, x] == player.Piece)
+
+                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
+                        board[i + 1, x] == activePlayer.Piece &&
+                        board[i + 2, x] == activePlayer.Piece &&
+                        board[i + 3, x] == activePlayer.Piece)
                     {
                         winner = true;
                     }
@@ -238,35 +237,31 @@ namespace ConnectGame
                 }
             }
 
-
-
             return winner; // if player wins retrun true
-           //WinnerBoard adapted from
-           //Doctor Krypto. (2020). C# Connect4 Console Game 4 Check for the Win [Video]. Youtube. https://www.youtube.com/watch?v=A-fl-Ui_8Wo&t=344s&ab_channel=DoctorKrypto
-        }       
+            //Doctor Krypto. (2020). C# Connect4 Console Game 4 Check for the Win [Video]. Youtube. https://www.youtube.com/watch?v=A-fl-Ui_8Wo&t=344s&ab_channel=DoctorKrypto
+        }
 
-         public static void WinnerPlayer(Player activePlayer) // display who is the winner
+
+
+        public static void WinnerPlayer(Player activePlayer) // display who is the winner
         {
             Console.WriteLine("");
             Console.WriteLine("The winner is {0}!({1})", activePlayer.Name, activePlayer.Piece);
         }
+        
     }
-    
-    
     public class Controller // Updated By Andrie
     {
         //add method for the numbers(pick)
-        //add method to restart
         //public void PlayerTurn()
-        
         public static string _piece { get; set; } = "a";
         public static int _position { get; set; } = 0;
 
-         public static void PlayerTurn(Player activePlayer)//displays whose turn it is
+        public static void PlayerTurn(Player activePlayer)//displays whose turn it is
         {
             Console.WriteLine("Its {0}'s turn({1})", activePlayer.Name, activePlayer.Piece);
         }
-        
+
         public static void PreviousMove()
         {
             if (_piece == "a" && _position == 0)
@@ -281,8 +276,30 @@ namespace ConnectGame
 
         }
 
+
+        public static string[,] CheckBottom(string[,] board) // checks the 'bottom' of the board
+        {
+
+            int i = 6;
+            while (i >= 1)
+            {
+                if (board[i, _position] != " X " && board[i, _position] != " O ")
+                {
+                    board[i, _position] = _piece;
+                    break;
+                }
+                else if (board[i, _position] == " X " || board[i, _position] == " O ")
+                {
+                    i--;
+
+                }
+            }
+
+
+            return board;
+        }
         
-        public static string[,] DropPiece(string[,] board, string piece, int mode)
+        public static string[,] DropPiece(string[,] board, string piece, int mode) //determines the placement of the piece
         {
             int pos;
             Random rnd = new Random();
@@ -303,9 +320,9 @@ namespace ConnectGame
                     }
 
                 } while (pos < 1 || pos > 7);
-                
-            }
-            //checks the 'top' of the board
+
+            }     
+
             if (board[1, pos] == " O " || board[1, pos] == " X ")
             {
                 Console.WriteLine("Column is Full! Select a new one.");
@@ -314,37 +331,22 @@ namespace ConnectGame
 
             _piece = piece;
             _position = pos;
-            
-            //checks the 'bottom' of the board
-            int i = 6;
-            while (i >= 1)
-            {
-                if (board[i, pos] != " X " && board[i, pos] != " O ")
-                {
-                    board[i, pos] = piece;
-                    break;
-                }
-                else if (board[i, pos] == " X " || board[i, pos] == " O ")
-                {
-                    i--;
-                }
-                else
-                {
-                    i--;
 
-                }
-            }
+  
             
+            CheckBottom(board);
+
             return board;
         }
 
-
     }
-    
-   class Program
+
+
+
+
+
+    class Program
     {
-      
-       
         static void Main(string[] args)
         {
             //initiating board
@@ -389,8 +391,6 @@ namespace ConnectGame
             player1.DisplayInfo();
             player2.DisplayInfo();
 
-            //Player obj = player1;
-            //Player obj2 = player2;
             Player active = player1;
 
             //start of the gameplay loop, first it shows the board
@@ -443,15 +443,12 @@ namespace ConnectGame
 
             Console.Read();
             
-            
-            
-            //Adapted from Github Gist Example
-            //Title: Connect 4 Command Line C#
-            //Author: Michael Estes
-            //Date:2013
-            //Code version: N/A
-            //Availablity: https://gist.github.com/MichaelEstes/7953391
-            
         }
     }
+    //Adapted from Github Gist Example
+    //Title: Connect 4 Command Line C#
+    //Author: Michael Estes
+    //Date:2013
+    //Code version: N/A
+    //Availablity: https://gist.github.com/MichaelEstes/7953391
 }
