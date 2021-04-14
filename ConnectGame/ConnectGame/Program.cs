@@ -72,7 +72,6 @@ namespace ConnectGame
         //add method to display and update board
         //check winning combination
         // restart game
-
         public Board()
         {
 
@@ -174,11 +173,8 @@ namespace ConnectGame
 
                 for (int x = 7; x >= 1; x--)
                 {
-
-                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
-                        board[i + 1, x - 1] == activePlayer.Piece &&
-                        board[i + 2, x - 2] == activePlayer.Piece &&
-                        board[i + 3, x - 3] == activePlayer.Piece)
+                    // check conditions if area is populated by the piece
+                    if (board[i, x] == activePlayer.Piece &&  board[i + 1, x - 1] == activePlayer.Piece && board[i + 2, x - 2] == activePlayer.Piece && board[i + 3, x - 3] == activePlayer.Piece)
                     {
                         winner = true;
                     }
@@ -191,11 +187,8 @@ namespace ConnectGame
 
                 for (int x = 1; x <= 6; x++)
                 {
-
-                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
-                        board[i + 1, x + 1] == activePlayer.Piece &&
-                        board[i + 2, x + 2] == activePlayer.Piece &&
-                        board[i + 3, x + 3] == activePlayer.Piece)
+                    // check conditions if area is populated by the piece
+                    if (board[i, x] == activePlayer.Piece && board[i + 1, x + 1] == activePlayer.Piece && board[i + 2, x + 2] == activePlayer.Piece && board[i + 3, x + 3] == activePlayer.Piece)
                     {
                         winner = true;
                     }
@@ -208,11 +201,8 @@ namespace ConnectGame
 
                 for (int x = 1; x <= 6; x++)
                 {
-
-                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
-                        board[i, x + 1] == activePlayer.Piece &&
-                        board[i, x + 2] == activePlayer.Piece &&
-                        board[i, x + 3] == activePlayer.Piece)
+                    // check conditions if area is populated by the piece
+                    if (board[i, x] == activePlayer.Piece && board[i, x + 1] == activePlayer.Piece && board[i, x + 2] == activePlayer.Piece && board[i, x + 3] == activePlayer.Piece)
                     {
                         winner = true;
                     }
@@ -225,11 +215,8 @@ namespace ConnectGame
 
                 for (int x = 1; x <= 7; x++)
                 {
-
-                    if (board[i, x] == activePlayer.Piece && // check conditions if area is populated by the piece
-                        board[i + 1, x] == activePlayer.Piece &&
-                        board[i + 2, x] == activePlayer.Piece &&
-                        board[i + 3, x] == activePlayer.Piece)
+                    // check conditions if area is populated by the piece
+                    if (board[i, x] == activePlayer.Piece && board[i + 1, x] == activePlayer.Piece && board[i + 2, x] == activePlayer.Piece && board[i + 3, x] == activePlayer.Piece)
                     {
                         winner = true;
                     }
@@ -366,7 +353,6 @@ namespace ConnectGame
             } while (mode > 2 || mode < 1);
 
             //takes in player information
-
             Console.WriteLine("Enter player information: ");
             Console.Write("Player 1: ");
             p1 = Console.ReadLine();
@@ -387,18 +373,16 @@ namespace ConnectGame
             }         
 
             // displays player information
-
             player1.DisplayInfo();
             player2.DisplayInfo();
+
 
             Player active = player1;
 
             //start of the gameplay loop, first it shows the board
-
             Board.BoardDisplay(board);
 
             //signals the start of the game
-
             Console.WriteLine("\nGame Start");
 
             do
@@ -419,7 +403,7 @@ namespace ConnectGame
                 Console.Clear();
                 Board.BoardDisplay(board);  //display board
                 bool winner = Board.WinnerBoard(board, active);
-                if (winner == true) //if condition to display when a player wins
+                if (winner == true) //if condition to display when player 1 wins 
                 {
                     Board.WinnerPlayer(active); //display winner and ask user if they want to play again.
                     reset = Board.RestartBoard(board);
@@ -445,10 +429,10 @@ namespace ConnectGame
             
         }
     }
-    //Adapted from Github Gist Example
-    //Title: Connect 4 Command Line C#
-    //Author: Michael Estes
-    //Date:2013
-    //Code version: N/A
-    //Availablity: https://gist.github.com/MichaelEstes/7953391
 }
+//Adapted from Github Gist Example
+//Title: Connect 4 Command Line C#
+//Author: Michael Estes
+//Date:2013
+//Code version: N/A
+//Availablity: https://gist.github.com/MichaelEstes/7953391
